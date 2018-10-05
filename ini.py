@@ -15,6 +15,6 @@ class INI():
         if not file_path:
             write_path = file_path
         with open(write_path, "w") as out_file:
-            out_file.write(self.ini)
+            out_file.writelines(self.ini)
     
     
