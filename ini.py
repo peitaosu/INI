@@ -30,7 +30,10 @@ class INI():
         for section, keys in self.ini.iteritems():
             new_ini_str.append("[{}]".format(section))
             for key, value in keys.iteritems():
-                new_ini_str.append("{}={}".format(key, value))
+                try:
+                    new_ini_str.append("{}={}".format(key, value))
+                except Exception as e:
+                    print("[Error] EXCEPTION ON {}: {}".format(key, str(e)))
         self.ini_str = new_ini_str
         with open(write_path, "w") as out_file:
             out_file.write("\n".join(self.ini_str))
