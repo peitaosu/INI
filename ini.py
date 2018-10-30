@@ -1,4 +1,4 @@
-import os, sys, codecs
+import os, sys, codecs, json
 
 class INI():
     def __init__(self):
@@ -7,7 +7,7 @@ class INI():
         self.ini_str = None
         self.ini_file_encode = "utf-8"
     
-    def read_from_file(self, file_path):
+    def read_from_ini(self, file_path):
         self.file_path = file_path
         with codecs.open(self.file_path, mode='r', encoding=self.ini_file_encode) as in_file:
             self.ini_str = filter(None, in_file.read().replace("\r", "").split("\n"))
@@ -22,7 +22,11 @@ class INI():
                 continue
             self.ini[section][ini_str.split("=")[0]] = ini_str.split("=")[1]
     
-    def write_to_file(self, file_path=None):
+    def read_from_json(self, file_path):
+        with open(file_path) as in_file:
+            self.ini = json.load(in_file)
+
+    def dump_to_ini(self, file_path=None):
         write_path = self.file_path
         if file_path:
             write_path = file_path
@@ -37,3 +41,7 @@ class INI():
         self.ini_str = new_ini_str
         with open(write_path, "w") as out_file:
             out_file.write("\n".join(self.ini_str))
+    
+    def dump_to_json(self, file_path):
+        with open(file_path, "w") as out_file:
+            json.dump(self.ini, out_file, indent=4)
