@@ -1,4 +1,4 @@
-import os, sys, codecs, json
+import os, sys, codecs, json, optparse
 
 class INI():
     def __init__(self):
@@ -45,3 +45,30 @@ class INI():
     def dump_to_json(self, file_path):
         with open(file_path, "w") as out_file:
             json.dump(self.ini, out_file, indent=4)
+
+def get_options():
+    parser = optparse.OptionParser()
+    parser.add_option("--in_ini", dest="in_ini",
+                      help="read from ini file")
+    parser.add_option("--in_json", dest="in_json",
+                      help="read from json file")
+    parser.add_option("--out_ini", dest="out_ini",
+                      help="dump to ini file")
+    parser.add_option("--out_json", dest="out_json",
+                      help="dump to json file")
+    (options, args) = parser.parse_args()
+    return options
+
+if __name__=="__main__":
+    opt = get_options()
+
+    ini = INI()
+    if opt.in_ini:
+        ini.read_from_ini(opt.in_ini)
+    if opt.in_json:
+        ini.read_from_json(opt.in_json)
+
+    if opt.out_ini:
+        ini.dump_to_ini(opt.out_ini)
+    if opt.out_json:
+        ini.dump_to_json(opt.out_json)
