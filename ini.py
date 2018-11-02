@@ -9,8 +9,12 @@ class INI():
     
     def read_from_ini(self, file_path):
         self.file_path = file_path
-        with codecs.open(self.file_path, mode='r', encoding=self.ini_file_encode) as in_file:
-            self.ini_str = filter(None, in_file.read().replace("\r", "").split("\n"))
+        try:
+            with codecs.open(self.file_path, mode='r', encoding=self.ini_file_encode) as in_file:
+                self.ini_str = filter(None, in_file.read().replace("\r", "").split("\n"))
+        except Exception as e:
+            print("[Error] EXCEPTION ON READING {}: {}".format(self.file_path, str(e)))
+            return False
         for ini_str in self.ini_str:
             if ini_str.startswith("#"):
                 continue
@@ -21,6 +25,7 @@ class INI():
             if "=" not in ini_str:
                 continue
             self.ini[section][ini_str.split("=")[0]] = ini_str.split("=")[1]
+        return True
     
     def read_from_json(self, file_path):
         with open(file_path) as in_file:
