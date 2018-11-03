@@ -2,18 +2,19 @@ import os, sys, codecs, json, optparse
 
 class INI():
     def __init__(self):
-        self.file_path = None
+        self.ini_file_path = None
+        self.json_file_path = None
         self.ini = {}
         self.ini_str = None
         self.ini_file_encode = "utf-8"
     
     def read_from_ini(self, file_path):
-        self.file_path = file_path
+        self.ini_file_path = file_path
         try:
-            with codecs.open(self.file_path, mode='r', encoding=self.ini_file_encode) as in_file:
+            with codecs.open(self.ini_file_path, mode='r', encoding=self.ini_file_encode) as in_file:
                 self.ini_str = filter(None, in_file.read().replace("\r", "").split("\n"))
         except Exception as e:
-            print("[Error] EXCEPTION ON READING {}: {}".format(self.file_path, str(e)))
+            print("[Error] EXCEPTION ON READING {}: {}".format(self.ini_file_path, str(e)))
             return False
         for ini_str in self.ini_str:
             if ini_str.startswith("#"):
@@ -28,11 +29,12 @@ class INI():
         return True
     
     def read_from_json(self, file_path):
-        with open(file_path) as in_file:
+        self.json_file_path = file_path
+        with open(self.json_file_path) as in_file:
             self.ini = json.load(in_file)
 
     def dump_to_ini(self, file_path=None):
-        write_path = self.file_path
+        write_path = self.ini_file_path
         if file_path:
             write_path = file_path
         new_ini_str = []
@@ -47,8 +49,11 @@ class INI():
         with open(write_path, "w") as out_file:
             out_file.write("\n".join(self.ini_str))
     
-    def dump_to_json(self, file_path):
-        with open(file_path, "w") as out_file:
+    def dump_to_json(self, file_path=None):
+        write_path = self.json_file_path
+        if file_path:
+            write_path = file_path
+        with open(write_path, "w") as out_file:
             json.dump(self.ini, out_file, indent=4)
 
 def get_options():
