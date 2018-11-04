@@ -9,6 +9,11 @@ class INI():
         self.ini_file_encode = "utf-8"
     
     def read_from_ini(self, file_path):
+        """read ini string from *.ini file and convert to dict type object - self.ini
+
+        args:
+            file_path (str)
+        """
         self.ini_file_path = file_path
         try:
             with codecs.open(self.ini_file_path, mode='r', encoding=self.ini_file_encode) as in_file:
@@ -29,11 +34,21 @@ class INI():
         return True
     
     def read_from_json(self, file_path):
+        """read ini dict object from *.json file and update self.ini
+
+        args:
+            file_path (str)
+        """
         self.json_file_path = file_path
         with open(self.json_file_path) as in_file:
             self.ini = json.load(in_file)
 
     def dump_to_ini(self, file_path=None):
+        """convert and dump dict type object self.ini to *.ini file
+
+        args:
+            file_path (str)
+        """
         write_path = self.ini_file_path
         if file_path:
             write_path = file_path
@@ -50,6 +65,11 @@ class INI():
             out_file.write("\n".join(self.ini_str))
     
     def dump_to_json(self, file_path=None):
+        """dump dict type object self.ini to *.json file
+
+        args:
+            file_path (str)
+        """
         write_path = self.json_file_path
         if file_path:
             write_path = file_path
